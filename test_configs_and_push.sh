@@ -1,9 +1,9 @@
 #!/bin/bash
 
-go get -d -v ./...
+go get .
 go build -o main
 chmod +x main
-./main
+./main --file sublinks.txt
 
 git add output.txt
 git commit -m "update output.txt, date: $(date)"
