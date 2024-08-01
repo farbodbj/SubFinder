@@ -1,13 +1,12 @@
 package v2rayprobe
 
 import (
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/web"
 	"context"
+	"github.com/xxf098/lite-proxy/web/render"
 	"net/url"
 	"runtime"
 	"time"
-
-	"github.com/xxf098/lite-proxy/web"
-	"github.com/xxf098/lite-proxy/web/render"
 )
 
 type V2rayProbe interface {

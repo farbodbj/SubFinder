@@ -1,8 +1,8 @@
 package main
 
 import (
+	"ConfigProbe/pkg/v2rayprobe"
 	"bufio"
-	"conf/pkg/v2rayprobe"
 	"flag"
 	"log/slog"
 	"os"
