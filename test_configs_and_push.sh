@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# Ensure the script is running in the correct directory
+cd "$(dirname "$0")"
+
+# Ensure Go is available in the cron job environment
+export PATH=$PATH:/usr/local/go/bin
+
 go get .
 go build -o main
 chmod +x main
