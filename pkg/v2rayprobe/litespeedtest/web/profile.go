@@ -502,7 +502,11 @@ func (p *ProfileTest) testAll(ctx context.Context) (render.Nodes, error) {
 		select {
 		case guard <- i:
 			go func(id int, link string, c <-chan int, nodeChan chan<- render.Node) {
-				p.testOne(ctx, id, link, nodeChan, nil)
+				seconds := time.Duration(2) * p.Options.Timeout
+				timeoutCtx, cacnel := context.WithTimeout(context.Background(), seconds)
+				defer cacnel()
+
+				p.testOne(timeoutCtx, id, link, nodeChan, nil)
 				_ = p.WriteMessage(getMsgByte(id, "endone"))
 				<-c
 			}(id, link, guard, nodeChan)
@@ -636,8 +640,7 @@ func (p *ProfileTest) testOne(ctx context.Context, index int, link string, nodeC
 		var sum int64
 		var avg int64
 		start := time.Now()
-	Loop:
-		for {
+	Loop: for {
 			select {
 			case speed, ok := <-ch:
 				if !ok || speed < 0 {
