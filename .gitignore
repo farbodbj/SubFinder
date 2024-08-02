@@ -1,2 +1,3 @@
 sublinks.txt
 *.log
+.env

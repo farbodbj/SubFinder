@@ -1,14 +1,18 @@
 #!/bin/bash
 
-# Check if both arguments are provided
-if [ $# -ne 3 ]; then
-    echo "Usage: $0 <API_TOKEN> <CHAT_ID> <FILE> <N_ITEMS>"
+# Load environment variables from .env file
+if [ -f .env ]; then
+    source .env
+else
+    echo "Error: .env file not found."
     exit 1
 fi
 
-API_TOKEN="$1"
-CHAT_ID="$2"
-FILE="$3"
+# Ensure required environment variables are set
+if [ -z "$API_TOKEN" ] || [ -z "$CHAT_ID" ] || [ -z "$FILE" ]; then
+    echo "Error: One or more required environment variables are missing in .env file."
+    exit 1
+fi
 
 HEADER="V2ray Config:"
 
