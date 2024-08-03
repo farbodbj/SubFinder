@@ -615,21 +615,26 @@ func (p *ProfileTest) testOne(ctx context.Context, index int, link string, nodeC
 	if (cfg.Protocol == "vmess" || cfg.Protocol == "trojan") && cfg.Net != "" {
 		protocol = fmt.Sprintf("%s/%s", cfg.Protocol, cfg.Net)
 	}
-	elapse, err := p.pingLink(index, link)
-	log.Printf("%d %s elapse: %dms", index, remarks, elapse)
-	if err != nil {
-		node := render.Node{
-			Id:       index,
-			Group:    p.Options.GroupName,
-			Remarks:  remarks,
-			Protocol: protocol,
-			Ping:     fmt.Sprintf("%d", elapse),
-			AvgSpeed: 0,
-			MaxSpeed: 0,
-			IsOk:     elapse > 0,
+
+	var elapse int64 = 0
+	if p.Options.SpeedTestMode != SpeedOnly {
+		elapse, err = p.pingLink(index, link)
+		log.Printf("%d %s elapse: %dms", index, remarks, elapse)
+	
+		if err != nil {
+			node := render.Node{
+				Id:       index,
+				Group:    p.Options.GroupName,
+				Remarks:  remarks,
+				Protocol: protocol,
+				Ping:     fmt.Sprintf("%d", elapse),
+				AvgSpeed: 0,
+				MaxSpeed: 0,
+				IsOk:     elapse > 0,
+			}
+			nodeChan <- node
+			return err
 		}
-		nodeChan <- node
-		return err
 	}
 	err = p.WriteMessage(getMsgByte(index, "startspeed"))
 	ch := make(chan int64, 1)
@@ -686,9 +691,6 @@ func (p *ProfileTest) testOne(ctx context.Context, index int, link string, nodeC
 }
 
 func (p *ProfileTest) pingLink(index int, link string) (int64, error) {
-	if p.Options.SpeedTestMode == SpeedOnly {
-		return 0, nil
-	}
 	if link == "" {
 		link = p.Links[index]
 	}
