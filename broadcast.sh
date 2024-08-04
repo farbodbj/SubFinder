@@ -34,11 +34,13 @@ send_message() {
             curl -s -X POST "https://api.telegram.org/bot$API_TOKEN/sendMessage" \
             -d chat_id="$CHAT_ID" \
             -d text="$message" \
+	    -d parse_mode='Markdown'
             --proxy "$PROXY_URL"
         else
             curl -s -X POST "https://api.telegram.org/bot$API_TOKEN/sendMessage" \
             -d chat_id="$CHAT_ID" \
             -d text="$message"
+	    -d parse_mode='Markdown'
         fi
 
         if [ $? -eq 0 ]; then
@@ -60,7 +62,7 @@ if [ -f "$FILE" ]; then
     count=0
     while IFS= read -r line && [ $count -lt 10 ]; do
         # Build the message
-        MESSAGE="${HEADER}%0A%0A${line}%0A%0AFollow us on: $CHAT_ID"
+        MESSAGE="${HEADER}%0A%0A```${line}```%0A%0AFollow us on: $CHAT_ID"
 
         # Send each line as a separate message with retry
         send_message "$MESSAGE"
