@@ -1,6 +1,12 @@
 # 📡 V2Ray Tester
 This project is a tool designed to retrieve, test, and push accessible V2Ray configurations to GitHub.
 
+## 🛠️ Features
+...
+
+## 📃 List of Aggregators
+● [V2RayAggregator](https://github.com/mahdibland/V2RayAggregator)
+
 ## 🚀 Getting Started
 ...
 
