@@ -16,9 +16,9 @@ if git diff --exit-code output.txt > /dev/null; then
     echo "No changes detected in output.txt. Skipping commit and push."
 else
     echo "Changes detected in output.txt. Committing and pushing changes."
-    bash brodcast.sh
     git add output.txt
     git commit -m "update output.txt, date: $(date)"
     git push origin master
+    bash broadcast.sh
 fi
 
