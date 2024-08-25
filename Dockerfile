@@ -3,7 +3,7 @@ FROM golang:1.21-alpine AS builder
 WORKDIR /go/src
 # Add gcc and libc-dev early so it is cached
 RUN set -xe \
-	&& apk add  gcc libc-dev git curl
+	&& apk add libc-dev git curl
 
 
 # first copy modules that should be downloaded
