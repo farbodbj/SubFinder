@@ -34,13 +34,13 @@ send_message() {
             curl -s -X POST "https://api.telegram.org/bot$API_TOKEN/sendMessage" \
             -d chat_id="$CHAT_ID" \
             -d text="$message" \
-	    -d parse_mode='MarkdownV2' \
+            -d parse_mode='MarkdownV2' \
             --proxy "$PROXY_URL"
         else
             curl -s -X POST "https://api.telegram.org/bot$API_TOKEN/sendMessage" \
             -d chat_id="$CHAT_ID" \
-            -d text="$message"
-	    -d parse_mode='MarkdownV2'
+            -d text="$message" \
+            -d parse_mode='MarkdownV2'
         fi
 
         if [ $? -eq 0 ]; then
@@ -57,17 +57,23 @@ send_message() {
     return 1
 }
 
-# Check if the file exists and read the top 10 lines
+# Check if the file exists and read the top 12 lines
 if [ -f "$FILE" ]; then
     count=0
-    while IFS= read -r line && [ $count -lt 10 ]; do
-        # Build the message
-	fence='`'
-        MESSAGE="${HEADER}%0A%0A${fence}${line}${fence}%0A%0AFollow us on: $CHAT_ID"
+    message_group=""
+    while IFS= read -r line && [ $count -lt 12 ]; do
+        # Add each line to the message group
+        fence='`'
+        message_group+="${fence}${line}${fence}%0A"
 
-        # Send each line as a separate message with retry
-        send_message "$MESSAGE"
         count=$((count + 1))
+
+        # Send in groups of 3
+        if [ $((count % 3)) -eq 0 ] || [ $count -eq 12 ]; then
+            MESSAGE="${HEADER}%0A%0A${message_group}%0AFollow us on: $CHAT_ID"
+            send_message "$MESSAGE"
+            message_group=""
+        fi
     done < "$FILE"
 else
     echo "File $FILE not found."
