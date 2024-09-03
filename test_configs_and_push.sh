@@ -9,7 +9,7 @@ export PATH=$PATH:/usr/local/go/bin
 go get .
 go build -o main
 chmod +x main
-./main --file sublinks.txt
+./main --file data/sublinks.txt
 
 # Check if 'output.txt' has changed
 if git diff --exit-code output.txt > /dev/null; then
