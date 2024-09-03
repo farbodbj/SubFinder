@@ -17,6 +17,7 @@ SubFinder is an open-source tool designed to combat internet censorship by retri
 SubFinder currently supports the following V2ray aggregators:
 
 * [V2RayAggregator](https://github.com/mahdibland/V2RayAggregator)
+* [telegram-configs-collector](https://github.com/soroushmirzaei/telegram-configs-collector)
 
 Feel free to contribute by extending this list with more aggregators!
 
