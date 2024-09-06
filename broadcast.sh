@@ -21,6 +21,16 @@ if [ -n "$PROXY_IP" ] && [ -n "$PROXY_PORT" ]; then
     PROXY_URL="http://$PROXY_IP:$PROXY_PORT"
 fi
 
+# Casual message templates
+casual_phrases=(
+    "💯 This batch is solid, ready to go!"
+    "🚀 Speed up your browsing with these top picks!"
+    "🔑 Unlock fast and secure browsing!"
+    "🌍 Trusted connections, tested for you!"
+    "⚡️ High speed, low latency, get connected!"
+    "🌟 These should work great for you!"
+)
+
 HEADER="V2ray Config:"
 
 # Function to send message via Telegram with retry logic
@@ -64,13 +74,14 @@ if [ -f "$FILE" ]; then
     while IFS= read -r line && [ $count -lt 12 ]; do
         # Add each line to the message group
         fence='`'
-        message_group+="${fence}${line}${fence}%0A"
+        message_group+="${fence}${line}${fence}%0A%0A"
 
         count=$((count + 1))
 
         # Send in groups of 3
         if [ $((count % 3)) -eq 0 ] || [ $count -eq 12 ]; then
-            MESSAGE="${HEADER}%0A%0A${message_group}%0AFollow us on: $CHAT_ID"
+            casual_message="${casual_phrases[$RANDOM % ${#casual_phrases[@]}]}"
+            MESSAGE="${HEADER}%0A%0A${message_group}%0A${casual_message}%0AFollow us on Telegram: @yourchannel"
             send_message "$MESSAGE"
             message_group=""
         fi
