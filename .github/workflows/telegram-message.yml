@@ -1,0 +1,33 @@
+name: Send V2Ray Links to Telegram
+
+# Trigger the workflow on push or pull request whenever a file changes
+on:
+  push:
+    paths:
+      - 'data/output.txt' # Specify the paths to monitor for changes, e.g., all text files
+
+  pull_request:
+    paths:
+      - 'data/output.txt'
+
+jobs:
+  send-links:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      # Set up environment variables (either hardcode them or use secrets)
+      - name: Set up environment
+        run: |
+          echo "API_TOKEN=${{ secrets.TELEGRAM_BOT_API_TOKEN }}" >> .env
+          echo "CHAT_ID=${{ secrets.TELEGRAM_CHAT_ID }}" >> .env
+          echo "FILE=output.txt" >> .env # Update to your actual output file if needed
+
+      # Run the script
+      - name: Send V2Ray Links to Telegram
+        run: |
+          chmod +x broadcast.sh
+          ./broadcast.sh
