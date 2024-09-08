@@ -4,11 +4,11 @@ name: Send V2Ray Links to Telegram
 on:
   push:
     paths:
-      - 'data/output.txt' # Specify the paths to monitor for changes, e.g., all text files
+      - 'output.txt' # Specify the paths to monitor for changes, e.g., all text files
 
   pull_request:
     paths:
-      - 'data/output.txt'
+      - 'output.txt'
 
 jobs:
   send-links:
