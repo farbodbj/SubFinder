@@ -3,10 +3,7 @@
 
 package web
 
-import "embed"
-
-//go:embed gui/dist/*
-var guiStatic embed.FS
+import _ "embed"
 
 //go:embed misc/WenQuanYiMicroHei-01.ttf
 var FontBytes []byte
