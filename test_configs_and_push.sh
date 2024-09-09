@@ -19,6 +19,5 @@ else
     git add output.txt
     git commit -m "update output.txt, date: $(date)"
     git push origin master
-    bash broadcast.sh
 fi
 
