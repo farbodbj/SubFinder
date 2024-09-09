@@ -23,12 +23,12 @@ fi
 
 # Casual message templates
 casual_phrases=(
-    "💯 This batch is solid, ready to go!"
-    "🚀 Speed up your browsing with these top picks!"
-    "🔑 Unlock fast and secure browsing!"
-    "🌍 Trusted connections, tested for you!"
-    "⚡️ High speed, low latency, get connected!"
-    "🌟 These should work great for you!"
+    "💯 This batch is solid, ready to go\\!"
+    "🚀 Speed up your browsing with these top picks\\!"
+    "🔑 Unlock fast and secure browsing\\!"
+    "🌍 Trusted connections, tested for you\\!"
+    "⚡️ High speed, low latency, get connected\\!"
+    "🌟 These should work great for you\\!"
 )
 
 HEADER="V2ray Config:"
@@ -81,7 +81,7 @@ if [ -f "$FILE" ]; then
         # Send in groups of 3
         if [ $((count % 3)) -eq 0 ] || [ $count -eq 12 ]; then
             casual_message="${casual_phrases[$RANDOM % ${#casual_phrases[@]}]}"
-            MESSAGE="${HEADER}%0A%0A${message_group}%0A${casual_message}%0AFollow us on Telegram: @yourchannel"
+            MESSAGE="${HEADER}%0A%0A${message_group}%0A${casual_message}%0AFollow us on Telegram: $CHAT_ID"
             send_message "$MESSAGE"
             message_group=""
         fi
