@@ -73,8 +73,9 @@ if [ -f "$FILE" ]; then
     message_group=""
     while IFS= read -r line && [ $count -lt 12 ]; do
         # Add each line to the message group
-        fence='`'
-        message_group+="${fence}${line}${fence}%0A%0A"
+        escaped_line=$(echo "$line" | sed 's/\./\\./g; s/-/\\-/g; s/(/\\(/g; s/)/\\)/g; s/!/\\!/g')
+        fence='\\`'
+        message_group+="${fence}${escaped_line}${fence}%0A%0A"
 
         count=$((count + 1))
 
