@@ -9,6 +9,7 @@ on:
   pull_request:
     paths:
       - 'output.txt'
+  workflow_dispatch:
 
 jobs:
   send-links:

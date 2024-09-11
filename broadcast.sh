@@ -15,21 +15,11 @@ if [ -z "$API_TOKEN" ] || [ -z "$CHAT_ID" ] || [ -z "$FILE" ]; then
 fi
 
 # Ensure optional proxy environment variables are set
-USE_PROXY=false
+USE_PROXY=True
 if [ -n "$PROXY_IP" ] && [ -n "$PROXY_PORT" ]; then
     USE_PROXY=true
     PROXY_URL="http://$PROXY_IP:$PROXY_PORT"
 fi
-
-# Casual message templates
-casual_phrases=(
-    "💯 This batch is solid, ready to go\\!"
-    "🚀 Speed up your browsing with these top picks\\!"
-    "🔑 Unlock fast and secure browsing\\!"
-    "🌍 Trusted connections, tested for you\\!"
-    "⚡️ High speed, low latency, get connected\\!"
-    "🌟 These should work great for you\\!"
-)
 
 HEADER="V2ray Config:"
 
@@ -44,13 +34,13 @@ send_message() {
             curl -s -X POST "https://api.telegram.org/bot$API_TOKEN/sendMessage" \
             -d chat_id="$CHAT_ID" \
             -d text="$message" \
-            -d parse_mode='MarkdownV2' \
+	        -d parse_mode='MarkdownV2' \
             --proxy "$PROXY_URL"
         else
             curl -s -X POST "https://api.telegram.org/bot$API_TOKEN/sendMessage" \
             -d chat_id="$CHAT_ID" \
             -d text="$message" \
-            -d parse_mode='MarkdownV2'
+	        -d parse_mode='MarkdownV2'
         fi
 
         if [ $? -eq 0 ]; then
@@ -67,25 +57,17 @@ send_message() {
     return 1
 }
 
-# Check if the file exists and read the top 12 lines
+# Check if the file exists and read the top 10 lines
 if [ -f "$FILE" ]; then
     count=0
-    message_group=""
-    while IFS= read -r line && [ $count -lt 12 ]; do
-        # Add each line to the message group
-        escaped_line=$(echo "$line" | sed 's/\./\\./g; s/-/\\-/g; s/(/\\(/g; s/)/\\)/g; s/!/\\!/g')
-        fence='\\`'
-        message_group+="${fence}${escaped_line}${fence}%0A%0A"
+    while IFS= read -r line && [ $count -lt 10 ]; do
+        # Build the message
+	fence='`'
+        MESSAGE="${HEADER}%0A%0A${fence}${line}${fence}%0A%0AFollow us on: $CHAT_ID"
 
+        # Send each line as a separate message with retry
+        send_message "$MESSAGE"
         count=$((count + 1))
-
-        # Send in groups of 3
-        if [ $((count % 3)) -eq 0 ] || [ $count -eq 12 ]; then
-            casual_message="${casual_phrases[$RANDOM % ${#casual_phrases[@]}]}"
-            MESSAGE="${HEADER}%0A%0A${message_group}%0A${casual_message}%0AFollow us on Telegram: $CHAT_ID"
-            send_message "$MESSAGE"
-            message_group=""
-        fi
     done < "$FILE"
 else
     echo "File $FILE not found."
