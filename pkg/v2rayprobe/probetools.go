@@ -103,7 +103,7 @@ func (v2ray *v2rayProbeImpl) createProfileTestOptions(
 	outputMode OutputMode,
 	timeout time.Duration,
 ) web.ProfileTestOptions {
-	v2ray.validateLinkOrPanic(sublink)
+
 	return web.ProfileTestOptions{
 		GroupName:     "Default",
 		SpeedTestMode: string(speedTestMode),

@@ -4,6 +4,7 @@ import (
 	"ConfigProbe/pkg/v2rayprobe"
 	"bufio"
 	"flag"
+	"fmt"
 	"log/slog"
 	"os"
 	"time"
@@ -29,7 +30,6 @@ func main() {
 
 	slog.Info("working nodes", "countOk", countOk)
 }
-
 
 func testLinks(v2rayTest v2rayprobe.V2rayProbe, links []string) int {
 	timeout := 10 * time.Second
@@ -61,9 +61,9 @@ func getFilePathFromArgs() *string {
 	return filePath
 }
 
-
 func readSubLinks(filePath *string) ([]string, error) {
 	// Open the file
+	fmt.Println("opening file : ", *filePath)
 	file, err := os.Open(*filePath)
 	if err != nil {
 		slog.Error("Error opening file", "err", err)
