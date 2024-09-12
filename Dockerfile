@@ -18,8 +18,9 @@ COPY . .
 RUN go build -o subfinder ./main.go
 
 FROM alpine:3.15.0
-WORKDIR /
+WORKDIR /subfinder
 
-COPY --from=builder /go/src/subfinder /go/src/data/sublinks.txt /
+COPY --from=builder /go/src/subfinder /subfinder/
 
-CMD ["/subfinder", "-file", "/sublinks.txt"]
+ENTRYPOINT ["/subfinder/subfinder", "-file", "/subfinder/data/sublinks.txt"]
+CMD [""]

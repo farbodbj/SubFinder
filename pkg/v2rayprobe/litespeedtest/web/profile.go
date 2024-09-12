@@ -593,7 +593,7 @@ func (p *ProfileTest) saveText(nodes render.Nodes) error {
 		}
 	}
 	data := []byte(strings.Join(links, "\n"))
-	return ioutil.WriteFile("output.txt", data, 0644)
+	return ioutil.WriteFile("data/output.txt", data, 0644)
 }
 
 func (p *ProfileTest) testOne(ctx context.Context, index int, link string, nodeChan chan<- render.Node, trafficChan chan<- int64) error {
@@ -620,7 +620,7 @@ func (p *ProfileTest) testOne(ctx context.Context, index int, link string, nodeC
 	if p.Options.SpeedTestMode != SpeedOnly {
 		elapse, err = p.pingLink(index, link)
 		log.Printf("%d %s elapse: %dms", index, remarks, elapse)
-	
+
 		if err != nil {
 			node := render.Node{
 				Id:       index,
@@ -645,7 +645,8 @@ func (p *ProfileTest) testOne(ctx context.Context, index int, link string, nodeC
 		var sum int64
 		var avg int64
 		start := time.Now()
-	Loop: for {
+	Loop:
+		for {
 			select {
 			case speed, ok := <-ch:
 				if !ok || speed < 0 {
