@@ -4,11 +4,11 @@ name: Send V2Ray Links to Telegram
 on:
   push:
     paths:
-      - 'output.txt' # Specify the paths to monitor for changes, e.g., all text files
+      - 'data/output.txt' # Specify the paths to monitor for changes, e.g., all text files
 
   pull_request:
     paths:
-      - 'output.txt'
+      - 'data/output.txt'
   workflow_dispatch:
 
 jobs:
@@ -25,7 +25,7 @@ jobs:
         run: |
           echo "API_TOKEN=${{ secrets.TELEGRAM_BOT_API_TOKEN }}" >> .env
           echo "CHAT_ID=${{ secrets.TELEGRAM_CHAT_ID }}" >> .env
-          echo "FILE=output.txt" >> .env # Update to your actual output file if needed
+          echo "FILE=data/output.txt" >> .env # Update to your actual output file if needed
 
       # Run the script
       - name: Send V2Ray Links to Telegram
