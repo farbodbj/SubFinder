@@ -7,6 +7,7 @@ cd "$(dirname "$0")"
 export PATH=$PATH:/usr/local/go/bin
 
 bash docker-entrypoint.sh
+git pull --rebase
 
 # Check if 'output.txt' has changed
 if git diff --exit-code data/output.txt > /dev/null; then
