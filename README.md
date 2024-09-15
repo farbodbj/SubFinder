@@ -50,7 +50,7 @@ We welcome contributions! Feel free to open issues, submit pull requests, or sug
 
 ### Planned Improvements:
 
-- [ ] Dockerize the project for easier deployment.
+- [x] Dockerize the project for easier deployment.
 - [ ] Filter V2ray links from specific countries like China or Hong Kong (due to widespread IP blocking).
 - [ ] Expand the list of supported subscriptions.
 
