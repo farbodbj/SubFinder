@@ -1,6 +1,6 @@
 module ConfigProbe
 
-go 1.19
+go 1.23
 
 require (
 	github.com/Dreamacro/go-shadowsocks2 v0.1.8
