@@ -19,10 +19,8 @@ import (
 )
 
 const (
-	downloadLink      = "https://download.microsoft.com/download/2/0/E/20E90413-712F-438C-988E-FDAA79A8AC3D/dotnetfx35.exe"
-	cloudflareLink100 = "https://speed.cloudflare.com/__down?bytes=100000000"
-	cachefly10        = "http://cachefly.cachefly.net/10mb.test"
-	cachefly100       = "http://cachefly.cachefly.net/100mb.test"
+	downloadLink = "https://speed.cloudflare.com/__down?bytes=100000"
+	cachefly10   = "https://cachefly.cachefly.net/10mb.test"
 )
 
 type DownloadOption struct {
@@ -157,7 +155,7 @@ func DownloadComplete(link string, timeout time.Duration, handshakeTimeout time.
 	if err != nil {
 		return 0, err
 	}
-	return downloadCompleteInternal(ctx, cachefly100, timeout, handshakeTimeout, client.Dial)
+	return downloadCompleteInternal(ctx, cachefly10, timeout, handshakeTimeout, client.Dial)
 }
 
 func downloadCompleteInternal(ctx context.Context, url string, timeout time.Duration, handshakeTimeout time.Duration, dial func(network, addr string) (net.Conn, error)) (int64, error) {
