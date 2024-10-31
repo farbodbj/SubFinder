@@ -91,6 +91,7 @@ func updateTest(w http.ResponseWriter, r *http.Request) {
 			}
 			links = uniqueLinks
 		}
+	
 		p := ProfileTest{
 			Writer:      c,
 			MessageType: mt,

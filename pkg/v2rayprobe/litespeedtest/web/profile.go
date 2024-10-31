@@ -414,9 +414,13 @@ type ProfileTest struct {
 func (p *ProfileTest) WriteMessage(data []byte) error {
 	var err error
 	if p.Writer != nil {
+		fmt.Printf("try lock START\n")
 		p.mu.Lock()
+		fmt.Printf("try lock OVER\n")
 		err = p.Writer.WriteMessage(p.MessageType, data)
+		fmt.Printf("try unlock START\n")
 		p.mu.Unlock()
+		fmt.Printf("try unlock OVER\n")
 	}
 	return err
 }
@@ -507,15 +511,26 @@ func (p *ProfileTest) testAll(ctx context.Context) (render.Nodes, error) {
 				defer cacnel()
 
 				p.testOne(timeoutCtx, id, link, nodeChan, nil)
+				fmt.Printf("%d: writing message\n", i)
 				_ = p.WriteMessage(getMsgByte(id, "endone"))
+				fmt.Printf("%d: writing message end\n", i)
+				fmt.Printf("%d: reading one from channel\n", i)
 				<-c
+				fmt.Printf("%d: one item poped from channel\n", i)
 			}(id, link, guard, nodeChan)
 		case <-ctx.Done():
+			fmt.Printf("%d: context fucking cancelled\n", i)
 			return nil, nil
 		}
 	}
+	fmt.Printf("waiting for the wg\n")
 	p.wg.Wait()
+	fmt.Printf("wait for wg over\n")
+
+	fmt.Printf("write eof message START\n")
 	p.WriteMessage(getMsgByte(-1, "eof"))
+	fmt.Printf("write eof message OVER\n")
+
 	duration := FormatDuration(time.Since(start))
 	// draw png
 	successCount := 0
@@ -529,6 +544,7 @@ func (p *ProfileTest) testAll(ctx context.Context) (render.Nodes, error) {
 			successCount += 1
 		}
 	}
+	fmt.Printf("closing channel")
 	close(nodeChan)
 
 	if p.Options.OutputMode == PIC_NONE {
@@ -546,6 +562,8 @@ func (p *ProfileTest) testAll(ctx context.Context) (render.Nodes, error) {
 		// render the result to pic
 		p.renderPic(nodes, traffic, duration, successCount, linksCount)
 	}
+
+	fmt.Printf("end of test all")
 	return nodes, nil
 }
 
@@ -598,7 +616,10 @@ func (p *ProfileTest) saveText(nodes render.Nodes) error {
 
 func (p *ProfileTest) testOne(ctx context.Context, index int, link string, nodeChan chan<- render.Node, trafficChan chan<- int64) error {
 	// panic
-	defer p.wg.Done()
+	defer func() {
+		fmt.Printf("%d: wg done called\n", index)
+		p.wg.Done()
+	}()
 	if link == "" {
 		link = p.Links[index]
 		link = strings.SplitN(link, "^", 2)[0]
@@ -608,9 +629,6 @@ func (p *ProfileTest) testOne(ctx context.Context, index int, link string, nodeC
 		return err
 	}
 	remarks := cfg.Remarks
-	if err != nil || remarks == "" {
-		remarks = fmt.Sprintf("Profile %d", index)
-	}
 	protocol := cfg.Protocol
 	if (cfg.Protocol == "vmess" || cfg.Protocol == "trojan") && cfg.Net != "" {
 		protocol = fmt.Sprintf("%s/%s", cfg.Protocol, cfg.Net)
@@ -649,7 +667,9 @@ func (p *ProfileTest) testOne(ctx context.Context, index int, link string, nodeC
 		for {
 			select {
 			case speed, ok := <-ch:
+				fmt.Printf("%d: CASE 1\n", index)
 				if !ok || speed < 0 {
+					fmt.Printf("%d: CASE 1: breaking the loop\n", index)
 					break Loop
 				}
 				sum += speed
@@ -658,15 +678,17 @@ func (p *ProfileTest) testOne(ctx context.Context, index int, link string, nodeC
 				if max < speed {
 					max = speed
 				}
-				log.Printf("%d %s recv: %s", index, remarks, download.ByteCountIEC(speed))
+				fmt.Printf("%d %s recv: %s\n", index, remarks, download.ByteCountIEC(speed))
 				err = p.WriteMessage(getMsgByte(index, "gotspeed", avg, max, speed))
 				if trafficChan != nil {
 					trafficChan <- speed
 				}
 			case s := <-startChan:
+				fmt.Printf("%d: CASE 2\n", index)
 				start = s
 			case <-ctx.Done():
-				log.Printf("index %d done!", index)
+				fmt.Printf("%d: CASE 3\n", index)
+				log.Printf("%d: index %d done!", index)
 				break Loop
 			}
 		}
@@ -681,13 +703,22 @@ func (p *ProfileTest) testOne(ctx context.Context, index int, link string, nodeC
 			IsOk:     true,
 			Traffic:  sum,
 		}
+		fmt.Printf("%d: created render node\n", index)
 		nodeChan <- node
+		fmt.Printf("%d: node sent to channel\n", index)
 	}(ch, startCh)
+
+	log.Printf("%d: START DOWNLOAD\n", index)
 	speed, err := download.Download(link, p.Options.Timeout, p.Options.Timeout, ch, startCh)
+	log.Printf("%d: END DOWNLOAD\n", index)
 	// speed, err := download.DownloadRange(link, 2, p.Options.Timeout, p.Options.Timeout, ch, startCh)
 	if speed < 1 {
+		log.Print("%d: SPEED < 1, S\n", index)
 		p.WriteMessage(getMsgByte(index, "gotspeed", -1, -1, 0))
+		log.Print("%d: SPEED < 1, E\n", index)
 	}
+
+	fmt.Printf("%d: returning from test oneeeeeee\n", index)
 	return err
 }
 
