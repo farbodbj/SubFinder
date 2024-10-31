@@ -3,10 +3,11 @@ package v2rayprobe
 import (
 	"ConfigProbe/pkg/v2rayprobe/litespeedtest/web"
 	"context"
-	"github.com/xxf098/lite-proxy/web/render"
 	"net/url"
 	"runtime"
 	"time"
+
+	"github.com/xxf098/lite-proxy/web/render"
 )
 
 type V2rayProbe interface {
@@ -40,7 +41,8 @@ func (v2ray *v2rayProbeImpl) TestV2RayPing(link string, sortDesc bool, timeout t
 }
 
 func (v2ray *v2rayProbeImpl) doTestWithOpts(probingMethod ProbeMethod, link string, sortDesc bool, timeout time.Duration) (render.Nodes, error) {
-	ctx := context.Background()
+	ctx, cancel := context.WithTimeout(context.Background(), time.Minutes*30)
+	defer cancel()
 
 	speedTestMode := Map(probingMethod, probeMethodToSpeedTestModeMapper)
 	opts := v2ray.createProfileTestOptions(
