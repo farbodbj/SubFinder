@@ -22,5 +22,5 @@ WORKDIR /subfinder
 
 COPY --from=builder /go/src/subfinder /subfinder/
 
-ENTRYPOINT ["/subfinder/subfinder", "-file", "/subfinder/data/sublinks.txt"]
+ENTRYPOINT ["/subfinder/subfinder", "--file", "/subfinder/data/sublinks.txt", "--method", "ping"]
 CMD [""]
