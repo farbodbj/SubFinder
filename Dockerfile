@@ -1,4 +1,4 @@
-FROM golang:1.21-alpine AS builder
+FROM docker.arvancloud.ir/golang:1.23-alpine AS builder
 
 WORKDIR /go/src
 # Add gcc and libc-dev early so it is cached
@@ -17,7 +17,7 @@ COPY . .
 # Build the applications as a staticly one, to allow it to run on alpine version
 RUN go build -o subfinder ./main.go
 
-FROM alpine:3.15.0
+FROM docker.arvancloud.ir/alpine:3.15.0
 WORKDIR /subfinder
 
 COPY --from=builder /go/src/subfinder /subfinder/
