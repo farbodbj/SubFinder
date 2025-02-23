@@ -2,8 +2,9 @@ package v2rayprobe
 
 import (
 	"ConfigProbe/pkg/v2rayprobe/litespeedtest/web"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/web/render"
 	"context"
-	"github.com/xxf098/lite-proxy/web/render"
+	"log"
 	"net/url"
 	"runtime"
 	"time"
@@ -137,6 +138,7 @@ func (v2ray *v2rayProbeImpl) validateLinkOrPanic(link string) {
 }
 
 func (v2ray *v2rayProbeImpl) doTest(ctx context.Context, opts web.ProfileTestOptions) (render.Nodes, error) {
+	log.Printf("Starting the test.")
 	nodes, err := web.TestContext(ctx, opts, &web.EmptyMessageWriter{})
 	if err != nil {
 		return nil, err

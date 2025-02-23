@@ -2,6 +2,7 @@ package main
 
 import (
 	"ConfigProbe/pkg/v2rayprobe"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/web/render"
 	"bufio"
 	"flag"
 	"fmt"
@@ -11,36 +12,71 @@ import (
 )
 
 func main() {
-	links, err := readSubLinks(getFilePathFromArgs())
-	if err != nil {
-		slog.Error("Reading subscription links", "Error occured when reading subscription links", err)
+	filePath := flag.String("file", "", "Path to file containing subscription links (required)")
+	testMethod := flag.String("method", "", "Test method [ping|speed|complete] (required)")
+	flag.Parse()
+
+	if *filePath == "" {
+		slog.Error("Missing required flag", "flag", "-file")
+		flag.Usage()
+		os.Exit(1)
 	}
 
-	// Initialize v2rayTest with desired options
+	if *testMethod == "" {
+		slog.Error("Missing required flag", "flag", "-method")
+		flag.Usage()
+		os.Exit(1)
+	}
+
+	validMethods := map[string]bool{"ping": true, "speed": true, "complete": true}
+	if !validMethods[*testMethod] {
+		slog.Error("Invalid test method", "valid_methods", validMethods, "received", *testMethod)
+		os.Exit(1)
+	}
+
+	links, err := readSubLinks(filePath)
+	if err != nil {
+		slog.Error("Failed reading subscription links", "error", err)
+		os.Exit(1)
+	}
+
 	v2rayTest := v2rayprobe.NewV2rayProbe(
 		v2rayprobe.ConcurrencyOpt(v2rayprobe.AUTO),
 		v2rayprobe.OutputMode(v2rayprobe.TEXT_OUTPUT),
 	)
 
-	countOk := testLinks(v2rayTest, links)
-	if countOk == 0 {
-		// re-perform the test
-		countOk = testLinks(v2rayTest, links)
-	}
-
-	slog.Info("working nodes", "countOk", countOk)
+	countOk := testLinks(v2rayTest, links, *testMethod)
+	slog.Info("Test completed", "working_nodes", countOk, "total_nodes", len(links))
 }
 
-func testLinks(v2rayTest v2rayprobe.V2rayProbe, links []string) int {
+func testLinks(v2rayTest v2rayprobe.V2rayProbe, links []string, method string) int {
 	timeout := 10 * time.Second
 	countOk := 0
 
-	// Test each link
 	for _, link := range links {
-		nodes, _ := v2rayTest.TestV2RaySpeed(link, true, timeout)
+		var nodes render.Nodes
+		var err error
+
+		switch method {
+		case "ping":
+			nodes, err = v2rayTest.TestV2RayPing(link, true, timeout)
+		case "speed":
+			nodes, err = v2rayTest.TestV2RaySpeed(link, true, timeout)
+		case "complete":
+			nodes, err = v2rayTest.TestV2RayComplete(link, true, timeout)
+		default:
+			slog.Error("Unhandled test method", "method", method)
+			continue
+		}
+
+		if err != nil {
+			slog.Warn("Test failed", "link", link, "error", err)
+			continue
+		}
+
 		for _, node := range nodes {
 			if node.IsOk {
-				slog.Info("working nodes", "node", node.Link)
+				slog.Info("Working node", "link", node.Link)
 				countOk++
 			}
 		}
@@ -49,20 +85,7 @@ func testLinks(v2rayTest v2rayprobe.V2rayProbe, links []string) int {
 	return countOk
 }
 
-func getFilePathFromArgs() *string {
-	// Parse the file path from command-line arguments
-	filePath := flag.String("file", "", "Path to the file containing subscription links")
-	flag.Parse()
-
-	if *filePath == "" {
-		slog.Error("File path not provided")
-		return nil
-	}
-	return filePath
-}
-
 func readSubLinks(filePath *string) ([]string, error) {
-	// Open the file
 	fmt.Println("opening file : ", *filePath)
 	file, err := os.Open(*filePath)
 	if err != nil {
@@ -71,7 +94,6 @@ func readSubLinks(filePath *string) ([]string, error) {
 	}
 	defer file.Close()
 
-	// Read the file line by line
 	var links []string
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
