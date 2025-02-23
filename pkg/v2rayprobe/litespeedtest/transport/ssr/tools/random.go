@@ -3,7 +3,7 @@ package tools
 import (
 	"encoding/binary"
 
-	"github.com/xxf098/lite-proxy/common/pool"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/common/pool"
 )
 
 // XorShift128Plus - a pseudorandom number generator

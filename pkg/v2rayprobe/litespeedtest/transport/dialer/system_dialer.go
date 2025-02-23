@@ -6,7 +6,7 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/xxf098/lite-proxy/log"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/log"
 )
 
 type controller func(network, address string, fd uintptr) error

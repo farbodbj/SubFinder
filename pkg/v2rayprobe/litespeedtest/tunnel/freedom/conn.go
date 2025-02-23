@@ -3,8 +3,8 @@ package freedom
 import (
 	"net"
 
-	"github.com/xxf098/lite-proxy/common"
-	"github.com/xxf098/lite-proxy/tunnel"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/common"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/tunnel"
 )
 
 type Conn struct {

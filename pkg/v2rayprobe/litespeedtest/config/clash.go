@@ -7,7 +7,7 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/xxf098/lite-proxy/dns"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/dns"
 	"gopkg.in/yaml.v3"
 )
 

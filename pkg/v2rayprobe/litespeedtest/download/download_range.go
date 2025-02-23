@@ -8,7 +8,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/xxf098/lite-proxy/common/pool"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/common/pool"
 )
 
 var (
@@ -24,7 +24,7 @@ func DownloadRange(ctx context.Context, link string, part int, timeout time.Dura
 	option := DownloadOption{
 		DownloadTimeout:  timeout,
 		HandshakeTimeout: handshakeTimeout,
-		URL:              downloadLink,
+		URL:              cachefly10,
 		Ranges:           calcRange(int64(part), int64(contentLength), link),
 	}
 	return downloadRangeInternal(ctx, option, resultChan, startChan, client.Dial)

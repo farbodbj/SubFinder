@@ -3,7 +3,7 @@ package adapter
 import (
 	"context"
 
-	"github.com/xxf098/lite-proxy/tunnel"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/tunnel"
 )
 
 const Name = "ADAPTER"

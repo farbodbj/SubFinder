@@ -5,8 +5,8 @@ import (
 	"io"
 	"log"
 
-	pb "github.com/xxf098/lite-proxy/api/rpc/lite"
-	"github.com/xxf098/lite-proxy/download"
+	pb "ConfigProbe/pkg/v2rayprobe/litespeedtest/api/rpc/lite"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/download"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )

@@ -1,6 +1,14 @@
 package outbound
 
 import (
+	C "ConfigProbe/pkg/v2rayprobe/litespeedtest/constant"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/log"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/stats"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/transport/dialer"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/transport/resolver"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/transport/socks5"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/transport/vmess"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/utils"
 	"context"
 	"encoding/json"
 	"errors"
@@ -9,15 +17,6 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
-
-	C "github.com/xxf098/lite-proxy/constant"
-	"github.com/xxf098/lite-proxy/log"
-	"github.com/xxf098/lite-proxy/stats"
-	"github.com/xxf098/lite-proxy/transport/dialer"
-	"github.com/xxf098/lite-proxy/transport/resolver"
-	"github.com/xxf098/lite-proxy/transport/socks5"
-	"github.com/xxf098/lite-proxy/transport/vmess"
-	"github.com/xxf098/lite-proxy/utils"
 )
 
 type Vmess struct {

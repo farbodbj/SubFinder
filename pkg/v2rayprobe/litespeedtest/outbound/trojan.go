@@ -9,11 +9,11 @@ import (
 	"net/http"
 	"strconv"
 
-	C "github.com/xxf098/lite-proxy/constant"
-	"github.com/xxf098/lite-proxy/stats"
-	"github.com/xxf098/lite-proxy/transport/dialer"
-	"github.com/xxf098/lite-proxy/transport/gun"
-	"github.com/xxf098/lite-proxy/transport/trojan"
+	C "ConfigProbe/pkg/v2rayprobe/litespeedtest/constant"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/stats"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/transport/dialer"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/transport/gun"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/transport/trojan"
 	"golang.org/x/net/http2"
 )
 

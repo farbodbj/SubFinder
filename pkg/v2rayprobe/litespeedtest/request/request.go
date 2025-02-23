@@ -11,18 +11,18 @@ import (
 	"strings"
 	"time"
 
-	"github.com/xxf098/lite-proxy/common"
-	"github.com/xxf098/lite-proxy/config"
-	C "github.com/xxf098/lite-proxy/constant"
-	"github.com/xxf098/lite-proxy/dns"
-	"github.com/xxf098/lite-proxy/outbound"
-	"github.com/xxf098/lite-proxy/transport/resolver"
-	"github.com/xxf098/lite-proxy/utils"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/common"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/config"
+	C "ConfigProbe/pkg/v2rayprobe/litespeedtest/constant"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/dns"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/outbound"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/transport/resolver"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/utils"
 )
 
 const (
 	remoteHost   = "clients3.google.com"
-	generate_204 = "http://clients3.google.com/generate_204"
+	generate_204 = "https://clients3.google.com/generate_204"
 )
 
 var (

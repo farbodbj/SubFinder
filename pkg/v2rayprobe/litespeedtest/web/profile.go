@@ -1,6 +1,11 @@
 package web
 
 import (
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/config"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/download"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/request"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/utils"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/web/render"
 	"bufio"
 	"bytes"
 	"context"
@@ -19,12 +24,6 @@ import (
 	"strings"
 	"sync"
 	"time"
-
-	"github.com/xxf098/lite-proxy/config"
-	"github.com/xxf098/lite-proxy/download"
-	"github.com/xxf098/lite-proxy/request"
-	"github.com/xxf098/lite-proxy/utils"
-	"github.com/xxf098/lite-proxy/web/render"
 )
 
 var (
@@ -549,6 +548,87 @@ func (p *ProfileTest) testAll(ctx context.Context) (render.Nodes, error) {
 	return nodes, nil
 }
 
+func (p *ProfileTest) testAllBatch(ctx context.Context, workerPoolSize int) (render.Nodes, error) {
+	linksCount := len(p.Links)
+	log.Printf("Count: %d", linksCount)
+	if linksCount < 1 {
+		p.WriteString(SPEEDTEST_ERROR_NONODES)
+		return nil, fmt.Errorf("no profile found")
+	}
+	start := time.Now()
+	p.WriteMessage(getMsgByte(-1, "started"))
+
+	nodes := make(render.Nodes, linksCount)
+	var traffic int64 = 0
+	successCount := 0
+
+	var (
+		mu sync.Mutex
+		wg sync.WaitGroup
+	)
+
+	// Worker pool configuration
+	maxWorkers := workerPoolSize // Adjust this number based on your needs
+	sem := make(chan struct{}, maxWorkers)
+
+	for i := 0; i < linksCount; i++ {
+		id := i
+		link := ""
+		if len(p.Options.TestIDs) > 0 && len(p.Options.Links) > 0 {
+			id = p.Options.TestIDs[i]
+			link = p.Options.Links[i]
+		}
+
+		wg.Add(1)
+		go func(id int, link string) {
+			defer wg.Done()
+			// Acquire semaphore
+			sem <- struct{}{}
+			defer func() { <-sem }()
+
+			// Create timeout context for each test
+			seconds := time.Duration(2) * p.Options.Timeout
+			timeoutCtx, cancel := context.WithTimeout(ctx, seconds)
+			defer cancel()
+
+			node, err := p.testOneSync(timeoutCtx, id, link)
+			if err != nil {
+				p.WriteMessage(getMsgByte(id, "endone"))
+			}
+
+			// Update node properties
+			node.Link = p.Links[node.Id]
+
+			// Synchronized write to shared data
+			mu.Lock()
+			defer mu.Unlock()
+
+			nodes[id] = node
+			traffic += node.Traffic
+			if node.IsOk {
+				successCount++
+			}
+		}(id, link)
+	}
+
+	wg.Wait()
+
+	duration := FormatDuration(time.Since(start))
+	// Rest of the output handling remains the same
+	if p.Options.OutputMode == PIC_NONE {
+		return nodes, nil
+	}
+	nodes.Sort(p.Options.SortMethod)
+	if p.Options.OutputMode == JSON_OUTPUT {
+		p.saveJSON(nodes, traffic, duration, successCount, linksCount)
+	} else if p.Options.OutputMode == TEXT_OUTPUT {
+		p.saveText(nodes)
+	} else {
+		p.renderPic(nodes, traffic, duration, successCount, linksCount)
+	}
+	return nodes, nil
+}
+
 func (p *ProfileTest) renderPic(nodes render.Nodes, traffic int64, duration string, successCount int, linksCount int) error {
 	fontPath := "WenQuanYiMicroHei-01.ttf"
 	options := render.NewTableOptions(40, 30, 0.5, 0.5, p.Options.FontSize, 0.5, fontPath, p.Options.Language, p.Options.Theme, "Asia/Shanghai", FontBytes)
@@ -689,6 +769,79 @@ func (p *ProfileTest) testOne(ctx context.Context, index int, link string, nodeC
 		p.WriteMessage(getMsgByte(index, "gotspeed", -1, -1, 0))
 	}
 	return err
+}
+
+func (p *ProfileTest) testOneSync(ctx context.Context, index int, link string) (render.Node, error) {
+	var node render.Node
+
+	// Determine the link to test
+	if link == "" {
+		link = p.Links[index]
+		link = strings.SplitN(link, "^", 2)[0]
+	}
+	cfg, err := config.Link2Config(link)
+	if err != nil {
+		log.Printf("Link %d: not working (configuration error: %v)", index, err)
+		return node, err
+	}
+	remarks := cfg.Remarks
+	if remarks == "" {
+		remarks = fmt.Sprintf("Profile %d", index)
+	}
+	protocol := cfg.Protocol
+	if (cfg.Protocol == "vmess" || cfg.Protocol == "trojan") && cfg.Net != "" {
+		protocol = fmt.Sprintf("%s/%s", cfg.Protocol, cfg.Net)
+	}
+	log.Printf("Testing link %d (%s)", index, remarks)
+
+	var elapse int64 = 0
+	if p.Options.SpeedTestMode != SpeedOnly {
+		elapse, err = p.pingLink(index, link)
+		log.Printf("Ping for link %d (%s): %dms", index, remarks, elapse)
+		if err != nil {
+			node = render.Node{
+				Id:       index,
+				Group:    p.Options.GroupName,
+				Remarks:  remarks,
+				Protocol: protocol,
+				Ping:     fmt.Sprintf("%d", elapse),
+				AvgSpeed: 0,
+				MaxSpeed: 0,
+				IsOk:     elapse > 0,
+			}
+			log.Printf("Link %d (%s): not working (ping error: %v)", index, remarks, err)
+			return node, err
+		}
+	}
+
+	_ = p.WriteMessage(getMsgByte(index, "startspeed"))
+	// Call download synchronously
+	speed, err := download.Download(link, p.Options.Timeout, p.Options.Timeout, nil, nil)
+	if speed < 1 {
+		p.WriteMessage(getMsgByte(index, "gotspeed", -1, -1, 0))
+	}
+
+	// Create the node based on the download result.
+	node = render.Node{
+		Id:       index,
+		Group:    p.Options.GroupName,
+		Remarks:  remarks,
+		Protocol: protocol,
+		Ping:     fmt.Sprintf("%d", elapse),
+		AvgSpeed: speed, // Using the final speed as both average and max.
+		MaxSpeed: speed,
+		IsOk:     err == nil && speed > 0,
+		Traffic:  speed,
+	}
+
+	// Final log: one line per link indicating working or not working.
+	if err != nil || speed < 1 {
+		log.Printf("Link %d (%s): not working (speed: %d, error: %v)", index, remarks, speed, err)
+	} else {
+		log.Printf("Link %d (%s): working (speed: %d)", index, remarks, speed)
+	}
+
+	return node, err
 }
 
 func (p *ProfileTest) pingLink(index int, link string) (int64, error) {

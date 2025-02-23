@@ -9,8 +9,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/xxf098/lite-proxy/outbound"
-	"github.com/xxf098/lite-proxy/utils"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/outbound"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/utils"
 )
 
 var (

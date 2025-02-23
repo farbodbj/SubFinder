@@ -6,7 +6,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/xxf098/lite-proxy/tunnel"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/tunnel"
 )
 
 // WorkerPool serves incoming connections via a pool of workers

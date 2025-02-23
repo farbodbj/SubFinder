@@ -1,13 +1,12 @@
 package config
 
 import (
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/common"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/outbound"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/utils"
 	"net/url"
 	"strconv"
 	"strings"
-
-	"github.com/xxf098/lite-proxy/common"
-	"github.com/xxf098/lite-proxy/outbound"
-	"github.com/xxf098/lite-proxy/utils"
 )
 
 func Link2Dialer(link string) (outbound.Dialer, error) {

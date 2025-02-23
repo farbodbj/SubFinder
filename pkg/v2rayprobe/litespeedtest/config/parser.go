@@ -9,8 +9,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/xxf098/lite-proxy/common/structure"
-	"github.com/xxf098/lite-proxy/outbound"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/common/structure"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/outbound"
 )
 
 func ParseProxy(mapping map[string]interface{}, namePrefix string) (string, error) {

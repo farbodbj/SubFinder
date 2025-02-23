@@ -4,7 +4,7 @@ import (
 	"errors"
 	"net"
 
-	"github.com/xxf098/lite-proxy/dns"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/dns"
 )
 
 var defaultResolver *dns.Resolver

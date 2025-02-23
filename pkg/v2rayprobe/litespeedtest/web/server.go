@@ -17,10 +17,10 @@ import (
 	"strings"
 	"time"
 
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/config"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/utils"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/web/render"
 	"github.com/gorilla/websocket"
-	"github.com/xxf098/lite-proxy/config"
-	"github.com/xxf098/lite-proxy/utils"
-	"github.com/xxf098/lite-proxy/web/render"
 )
 
 var upgrader = websocket.Upgrader{}
@@ -186,7 +186,7 @@ func TestContext(ctx context.Context, options ProfileTestOptions, w MessageWrite
 		Links:       links,
 		Options:     &options,
 	}
-	return p.testAll(ctx)
+	return p.testAllBatch(ctx, options.Concurrency)
 }
 
 // use as golang api

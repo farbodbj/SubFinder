@@ -11,8 +11,8 @@ import (
 	"strings"
 	"unsafe"
 
-	"github.com/xxf098/lite-proxy/common"
-	"github.com/xxf098/lite-proxy/log"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/common"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/log"
 )
 
 func CheckLink(link string) ([]string, error) {

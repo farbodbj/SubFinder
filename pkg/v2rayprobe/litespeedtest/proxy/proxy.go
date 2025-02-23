@@ -8,12 +8,12 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/xxf098/lite-proxy/common"
-	N "github.com/xxf098/lite-proxy/common/net"
-	"github.com/xxf098/lite-proxy/common/pool"
-	"github.com/xxf098/lite-proxy/log"
-	"github.com/xxf098/lite-proxy/tunnel"
-	"github.com/xxf098/lite-proxy/utils"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/common"
+	N "ConfigProbe/pkg/v2rayprobe/litespeedtest/common/net"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/common/pool"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/log"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/tunnel"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/utils"
 )
 
 // proxy http/scocks to vmess

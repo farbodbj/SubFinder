@@ -7,8 +7,8 @@ import (
 	"log"
 	"time"
 
-	"github.com/xxf098/lite-proxy/download"
-	"github.com/xxf098/lite-proxy/web"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/download"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/web"
 )
 
 func main() {

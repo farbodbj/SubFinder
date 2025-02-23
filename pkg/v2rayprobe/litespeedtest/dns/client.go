@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"net"
 
-	"github.com/xxf098/lite-proxy/transport/dialer"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/transport/dialer"
 
 	D "github.com/miekg/dns"
 )

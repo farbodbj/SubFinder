@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/xxf098/lite-proxy/transport/socks5"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/transport/socks5"
 )
 
 // Socks addr type

@@ -6,7 +6,7 @@ import (
 	"math/rand"
 	"net"
 
-	"github.com/xxf098/lite-proxy/common/pool"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/common/pool"
 )
 
 func init() {

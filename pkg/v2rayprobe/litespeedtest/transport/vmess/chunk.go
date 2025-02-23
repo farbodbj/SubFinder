@@ -5,7 +5,7 @@ import (
 	"errors"
 	"io"
 
-	"github.com/xxf098/lite-proxy/common/pool"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/common/pool"
 )
 
 const (

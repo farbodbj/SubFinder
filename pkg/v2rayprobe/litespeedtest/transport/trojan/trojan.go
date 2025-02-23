@@ -13,9 +13,9 @@ import (
 	"net/http"
 	"sync"
 
-	C "github.com/xxf098/lite-proxy/constant"
-	"github.com/xxf098/lite-proxy/transport/socks5"
-	"github.com/xxf098/lite-proxy/transport/vmess"
+	C "ConfigProbe/pkg/v2rayprobe/litespeedtest/constant"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/transport/socks5"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/transport/vmess"
 )
 
 const (

@@ -6,7 +6,7 @@ package dialer
 import (
 	"syscall"
 
-	"github.com/xxf098/lite-proxy/common"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/common"
 	"golang.org/x/sys/unix"
 )
 

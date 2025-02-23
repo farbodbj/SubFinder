@@ -7,8 +7,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/xxf098/lite-proxy/config"
-	"github.com/xxf098/lite-proxy/download"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/config"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/download"
 )
 
 const (

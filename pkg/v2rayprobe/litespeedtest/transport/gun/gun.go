@@ -16,7 +16,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/xxf098/lite-proxy/common/pool"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/common/pool"
 
 	"go.uber.org/atomic"
 	"golang.org/x/net/http2"

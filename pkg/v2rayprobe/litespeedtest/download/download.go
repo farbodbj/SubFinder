@@ -1,28 +1,23 @@
 package download
 
 import (
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/common/pool"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/outbound"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/proxy"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/stats"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/utils"
 	"context"
+	"errors"
 	"fmt"
 	"io"
 	"net"
 	"net/http"
 	"strings"
 	"time"
-
-	"errors"
-
-	"github.com/xxf098/lite-proxy/common/pool"
-	"github.com/xxf098/lite-proxy/outbound"
-	"github.com/xxf098/lite-proxy/proxy"
-	"github.com/xxf098/lite-proxy/stats"
-	"github.com/xxf098/lite-proxy/utils"
 )
 
 const (
-	downloadLink      = "https://download.microsoft.com/download/2/0/E/20E90413-712F-438C-988E-FDAA79A8AC3D/dotnetfx35.exe"
-	cloudflareLink100 = "https://speed.cloudflare.com/__down?bytes=100000000"
-	cachefly10        = "http://cachefly.cachefly.net/10mb.test"
-	cachefly100       = "http://cachefly.cachefly.net/100mb.test"
+	cachefly10 = "https://cachefly.cachefly.net/10mb.test"
 )
 
 type DownloadOption struct {
@@ -97,7 +92,7 @@ func Download(link string, timeout time.Duration, handshakeTimeout time.Duration
 	option := DownloadOption{
 		DownloadTimeout:  timeout,
 		HandshakeTimeout: handshakeTimeout,
-		URL:              downloadLink,
+		URL:              cachefly10,
 	}
 	return downloadInternal(ctx, option, resultChan, startChan, client.Dial)
 }
@@ -157,7 +152,7 @@ func DownloadComplete(link string, timeout time.Duration, handshakeTimeout time.
 	if err != nil {
 		return 0, err
 	}
-	return downloadCompleteInternal(ctx, cachefly100, timeout, handshakeTimeout, client.Dial)
+	return downloadCompleteInternal(ctx, cachefly10, timeout, handshakeTimeout, client.Dial)
 }
 
 func downloadCompleteInternal(ctx context.Context, url string, timeout time.Duration, handshakeTimeout time.Duration, dial func(network, addr string) (net.Conn, error)) (int64, error) {

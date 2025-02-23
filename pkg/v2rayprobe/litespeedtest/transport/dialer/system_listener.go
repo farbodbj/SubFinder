@@ -1,12 +1,11 @@
 package dialer
 
 import (
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/common"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/log"
 	"context"
 	"net"
 	"syscall"
-
-	"github.com/xxf098/lite-proxy/common"
-	"github.com/xxf098/lite-proxy/log"
 )
 
 var (

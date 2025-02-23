@@ -13,8 +13,8 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/xxf098/lite-proxy/constant"
-	"github.com/xxf098/lite-proxy/download"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/constant"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/download"
 	"golang.org/x/image/font"
 )
 

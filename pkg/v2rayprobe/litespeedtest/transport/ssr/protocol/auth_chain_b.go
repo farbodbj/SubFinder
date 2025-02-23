@@ -4,7 +4,7 @@ import (
 	"net"
 	"sort"
 
-	"github.com/xxf098/lite-proxy/transport/ssr/tools"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/transport/ssr/tools"
 )
 
 func init() {

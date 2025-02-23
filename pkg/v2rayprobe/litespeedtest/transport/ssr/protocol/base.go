@@ -10,8 +10,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/xxf098/lite-proxy/common/pool"
-	"github.com/xxf098/lite-proxy/log"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/common/pool"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/log"
 
 	"github.com/Dreamacro/go-shadowsocks2/core"
 )

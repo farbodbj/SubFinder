@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"net"
 
-	C "github.com/xxf098/lite-proxy/constant"
-	"github.com/xxf098/lite-proxy/outbound"
-	"github.com/xxf098/lite-proxy/tunnel"
+	C "ConfigProbe/pkg/v2rayprobe/litespeedtest/constant"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/outbound"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/tunnel"
 )
 
 type Client struct {

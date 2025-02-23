@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"net"
 
-	"github.com/xxf098/lite-proxy/common/pool"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/common/pool"
 )
 
 type Conn struct {

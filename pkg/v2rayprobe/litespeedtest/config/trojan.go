@@ -6,7 +6,7 @@ import (
 	"net/url"
 	"strconv"
 
-	"github.com/xxf098/lite-proxy/outbound"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/outbound"
 )
 
 // type TrojanGoOption struct {

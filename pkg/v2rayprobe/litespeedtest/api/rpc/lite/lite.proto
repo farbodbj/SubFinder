@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option go_package = "github.com/xxf098/lite-proxy/api/rpc/lite";
+option go_package = "ConfigProbe/pkg/v2rayprobe/litespeedtest/api/rpc/lite";
 option java_multiple_files = true;
 option java_package = "com.github.xxf098.api.rpc.lite";
 option java_outer_classname = "LiteProxy";

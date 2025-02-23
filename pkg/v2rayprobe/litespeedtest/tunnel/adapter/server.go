@@ -6,13 +6,13 @@ import (
 	"errors"
 	"net"
 
-	"github.com/xxf098/lite-proxy/common"
-	"github.com/xxf098/lite-proxy/log"
-	"github.com/xxf098/lite-proxy/tunnel"
-	"github.com/xxf098/lite-proxy/tunnel/freedom"
-	"github.com/xxf098/lite-proxy/tunnel/http"
-	"github.com/xxf098/lite-proxy/tunnel/socks"
-	"github.com/xxf098/lite-proxy/utils"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/common"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/log"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/tunnel"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/tunnel/freedom"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/tunnel/http"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/tunnel/socks"
+	"ConfigProbe/pkg/v2rayprobe/litespeedtest/utils"
 )
 
 type Server struct {
