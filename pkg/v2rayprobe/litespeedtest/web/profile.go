@@ -50,6 +50,10 @@ const (
 	PARSE_PROFILE
 )
 
+const (
+	remarkPrefix = "SubFinder"
+)
+
 // support proxy
 // concurrency setting
 // as subscription server
@@ -536,6 +540,7 @@ func (p *ProfileTest) testAll(ctx context.Context) (render.Nodes, error) {
 
 	// sort nodes
 	nodes.Sort(p.Options.SortMethod)
+	nodes.ChangeRemarks(remarkPrefix)
 	// save json
 	if p.Options.OutputMode == JSON_OUTPUT {
 		p.saveJSON(nodes, traffic, duration, successCount, linksCount)
@@ -616,6 +621,7 @@ func (p *ProfileTest) testAllBatch(ctx context.Context, workerPoolSize int) (ren
 		return nodes, nil
 	}
 	nodes.Sort(p.Options.SortMethod)
+	nodes.ChangeRemarks(remarkPrefix)
 	if p.Options.OutputMode == JSON_OUTPUT {
 		p.saveJSON(nodes, traffic, duration, successCount, linksCount)
 	} else if p.Options.OutputMode == TEXT_OUTPUT {
