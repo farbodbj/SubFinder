@@ -26,31 +26,15 @@ import (
 var upgrader = websocket.Upgrader{}
 
 func ServeFile(port int) error {
-	// TODO: Mobile UI
-	http.HandleFunc("/", serverFile)
 	http.HandleFunc("/test", updateTest)
 	http.HandleFunc("/getSubscriptionLink", getSubscriptionLink)
 	http.HandleFunc("/getSubscription", getSubscription)
-	http.HandleFunc("/generateResult", generateResult)
 	log.Printf("Start server at http://127.0.0.1:%d\n", port)
 	if ipAddr, err := localIP(); err == nil {
 		log.Printf("Start server at http://%s", net.JoinHostPort(ipAddr.String(), strconv.Itoa(port)))
 	}
 	err := http.ListenAndServe(fmt.Sprintf(":%d", port), nil)
 	return err
-}
-
-// func ServeWasm(port int) error {
-// 	http.Handle("/", http.FileServer(http.FS(wasmStatic)))
-// 	log.Printf("Start server at http://127.0.0.1:%d", port)
-// 	err := http.ListenAndServe(fmt.Sprintf(":%d", port), nil)
-// 	return err
-// }
-
-func serverFile(w http.ResponseWriter, r *http.Request) {
-	h := http.FileServer(http.FS(guiStatic))
-	r.URL.Path = "gui/dist" + r.URL.Path
-	h.ServeHTTP(w, r)
 }
 
 func updateTest(w http.ResponseWriter, r *http.Request) {
@@ -216,42 +200,6 @@ type TestResult struct {
 	Nodes render.Nodes `json:"nodes"`
 }
 
-func generateResult(w http.ResponseWriter, r *http.Request) {
-	result := TestResult{}
-	if r.Body == nil {
-		http.Error(w, "Please send a request body", 400)
-		return
-	}
-	data, err := io.ReadAll(r.Body)
-	if err != nil {
-		http.Error(w, "Please send a request body", 400)
-		return
-	}
-	if err = json.Unmarshal(data, &result); err != nil {
-		http.Error(w, err.Error(), 400)
-		return
-	}
-	fontPath := "WenQuanYiMicroHei-01.ttf"
-	options := render.NewTableOptions(40, 30, 0.5, 0.5, result.FontSize, 0.5, fontPath, result.Language, result.Theme, "Asia/Shanghai", FontBytes)
-	table, err := render.NewTableWithOption(result.Nodes, &options)
-	if err != nil {
-		http.Error(w, err.Error(), 400)
-		return
-	}
-	linksCount := 0
-	successCount := 0
-	for _, v := range result.Nodes {
-		linksCount += 1
-		if v.IsOk {
-			successCount += 1
-		}
-	}
-	msg := table.FormatTraffic(result.TotalTraffic, result.TotalTime, fmt.Sprintf("%d/%d", successCount, linksCount))
-	if picdata, err := table.EncodeB64(msg); err == nil {
-		fmt.Fprint(w, picdata)
-	}
-
-}
 
 func isPrivateIP(ip net.IP) bool {
 	var privateIPBlocks []*net.IPNet

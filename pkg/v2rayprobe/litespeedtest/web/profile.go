@@ -541,9 +541,6 @@ func (p *ProfileTest) testAll(ctx context.Context) (render.Nodes, error) {
 		p.saveJSON(nodes, traffic, duration, successCount, linksCount)
 	} else if p.Options.OutputMode == TEXT_OUTPUT {
 		p.saveText(nodes)
-	} else {
-		// render the result to pic
-		p.renderPic(nodes, traffic, duration, successCount, linksCount)
 	}
 	return nodes, nil
 }
@@ -623,31 +620,10 @@ func (p *ProfileTest) testAllBatch(ctx context.Context, workerPoolSize int) (ren
 		p.saveJSON(nodes, traffic, duration, successCount, linksCount)
 	} else if p.Options.OutputMode == TEXT_OUTPUT {
 		p.saveText(nodes)
-	} else {
-		p.renderPic(nodes, traffic, duration, successCount, linksCount)
 	}
 	return nodes, nil
 }
 
-func (p *ProfileTest) renderPic(nodes render.Nodes, traffic int64, duration string, successCount int, linksCount int) error {
-	fontPath := "WenQuanYiMicroHei-01.ttf"
-	options := render.NewTableOptions(40, 30, 0.5, 0.5, p.Options.FontSize, 0.5, fontPath, p.Options.Language, p.Options.Theme, "Asia/Shanghai", FontBytes)
-	table, err := render.NewTableWithOption(nodes, &options)
-	if err != nil {
-		return err
-	}
-	// msg := fmt.Sprintf("Total Traffic : %s. Total Time : %s. Working Nodes: [%d/%d]", download.ByteCountIECTrim(traffic), duration, successCount, linksCount)
-	msg := table.FormatTraffic(download.ByteCountIECTrim(traffic), duration, fmt.Sprintf("%d/%d", successCount, linksCount))
-	if p.Options.OutputMode == PIC_PATH {
-		table.Draw("out.png", msg)
-		p.WriteMessage(getMsgByte(-1, "picdata", "out.png"))
-		return nil
-	}
-	if picdata, err := table.EncodeB64(msg); err == nil {
-		p.WriteMessage(getMsgByte(-1, "picdata", picdata))
-	}
-	return nil
-}
 
 func (p *ProfileTest) saveJSON(nodes render.Nodes, traffic int64, duration string, successCount int, linksCount int) error {
 	jsonOutput := JSONOutput{
