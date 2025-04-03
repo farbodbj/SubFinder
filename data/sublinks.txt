@@ -2,6 +2,3 @@ https://raw.githubusercontent.com/soroushmirzaei/telegram-configs-collector/main
 https://raw.githubusercontent.com/soroushmirzaei/telegram-configs-collector/main/layers/ipv6
 https://raw.githubusercontent.com/soroushmirzaei/telegram-configs-collector/main/security/tls
 https://raw.githubusercontent.com/soroushmirzaei/telegram-configs-collector/main/countries/us/mixed
-https://raw.githubusercontent.com/Surfboardv2ray/TGParse/main/splitted/vless
-https://raw.githubusercontent.com/Surfboardv2ray/TGParse/main/splitted/vmess
-https://raw.githubusercontent.com/Surfboardv2ray/TGParse/main/splitted/trojan
