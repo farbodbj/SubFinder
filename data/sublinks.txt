@@ -1,4 +1,2 @@
-https://raw.githubusercontent.com/soroushmirzaei/telegram-configs-collector/main/splitted/mixed
-https://raw.githubusercontent.com/soroushmirzaei/telegram-configs-collector/main/layers/ipv6
-https://raw.githubusercontent.com/soroushmirzaei/telegram-configs-collector/main/security/tls
-https://raw.githubusercontent.com/soroushmirzaei/telegram-configs-collector/main/countries/us/mixed
+https://raw.githubusercontent.com/MhdiTaheri/V2rayCollector_Py/refs/heads/main/sub/Mix/mix.txt
+https://raw.githubusercontent.com/mahdibland/V2RayAggregator/refs/heads/master/sub/splitted/vmess.txt
