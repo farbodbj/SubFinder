@@ -51,7 +51,8 @@ const (
 )
 
 const (
-	remarkPrefix = "SubFinder"
+	remarkPrefix    = "SubFinder"
+	MinCountToWrite = 10
 )
 
 // support proxy
@@ -542,10 +543,12 @@ func (p *ProfileTest) testAll(ctx context.Context) (render.Nodes, error) {
 	nodes.Sort(p.Options.SortMethod)
 	nodes.ChangeRemarks(remarkPrefix)
 	// save json
-	if p.Options.OutputMode == JSON_OUTPUT {
-		p.saveJSON(nodes, traffic, duration, successCount, linksCount)
-	} else if p.Options.OutputMode == TEXT_OUTPUT {
-		p.saveText(nodes)
+	if len(nodes) >= MinCountToWrite {
+		if p.Options.OutputMode == JSON_OUTPUT {
+			p.saveJSON(nodes, traffic, duration, successCount, linksCount)
+		} else if p.Options.OutputMode == TEXT_OUTPUT {
+			p.saveText(nodes)
+		}
 	}
 	return nodes, nil
 }
@@ -629,7 +632,6 @@ func (p *ProfileTest) testAllBatch(ctx context.Context, workerPoolSize int) (ren
 	}
 	return nodes, nil
 }
-
 
 func (p *ProfileTest) saveJSON(nodes render.Nodes, traffic int64, duration string, successCount int, linksCount int) error {
 	jsonOutput := JSONOutput{
