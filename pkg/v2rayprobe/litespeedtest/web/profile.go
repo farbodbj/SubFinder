@@ -9,7 +9,6 @@ import (
 	"bufio"
 	"bytes"
 	"context"
-	"encoding/base64"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -463,6 +462,7 @@ func (p *ProfileTest) TestAll(ctx context.Context, trafficChan chan<- int64) (ch
 	return nodeChan, nil
 }
 
+// Deprecated: use testAllBatch instead
 func (p *ProfileTest) testAll(ctx context.Context) (render.Nodes, error) {
 	linksCount := len(p.Links)
 	if linksCount < 1 {
@@ -858,59 +858,6 @@ func FormatDuration(duration time.Duration) string {
 	return fmt.Sprintf("%dm %ds", m, s)
 }
 
-func png2base64(path string) (string, error) {
-	bytes, err := ioutil.ReadFile(path)
-	if err != nil {
-		return "", err
-	}
-	return "data:image/png;base64," + base64.StdEncoding.EncodeToString(bytes), nil
-}
-
 func isYamlFile(filePath string) bool {
 	return strings.HasSuffix(filePath, ".yaml") || strings.HasSuffix(filePath, ".yml")
-}
-
-// api
-func PeekClash(input string, n int) ([]string, error) {
-	scanner := bufio.NewScanner(strings.NewReader(input))
-	proxiesStart := false
-	data := []byte{}
-	linkCount := 0
-	for scanner.Scan() {
-		b := scanner.Bytes()
-		trimLine := strings.TrimSpace(string(b))
-		if trimLine == "proxy-groups:" || trimLine == "rules:" || trimLine == "Proxy Group:" {
-			break
-		}
-		if proxiesStart {
-			if _, err := config.ParseBaseProxy(trimLine); err != nil {
-				continue
-			}
-			if strings.HasPrefix(trimLine, "-") {
-				if linkCount >= n {
-					break
-				}
-				linkCount += 1
-			}
-			data = append(data, b...)
-			data = append(data, byte('\n'))
-			continue
-		}
-		if !proxiesStart && (trimLine == "proxies:" || trimLine == "Proxy:") {
-			proxiesStart = true
-			b = []byte("proxies:")
-		}
-		data = append(data, b...)
-		data = append(data, byte('\n'))
-	}
-	// fmt.Println(string(data))
-	links, err := parseClashByte(data)
-	if err != nil || len(links) < 1 {
-		return []string{}, err
-	}
-	endIndex := n
-	if endIndex > len(links) {
-		endIndex = len(links)
-	}
-	return links[:endIndex], nil
 }

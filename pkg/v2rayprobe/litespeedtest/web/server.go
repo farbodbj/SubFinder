@@ -13,82 +13,13 @@ import (
 	"net/http"
 	"net/url"
 	"os"
-	"strconv"
 	"strings"
 	"time"
 
 	"ConfigProbe/pkg/v2rayprobe/litespeedtest/config"
 	"ConfigProbe/pkg/v2rayprobe/litespeedtest/utils"
 	"ConfigProbe/pkg/v2rayprobe/litespeedtest/web/render"
-	"github.com/gorilla/websocket"
 )
-
-var upgrader = websocket.Upgrader{}
-
-func ServeFile(port int) error {
-	http.HandleFunc("/test", updateTest)
-	http.HandleFunc("/getSubscriptionLink", getSubscriptionLink)
-	http.HandleFunc("/getSubscription", getSubscription)
-	log.Printf("Start server at http://127.0.0.1:%d\n", port)
-	if ipAddr, err := localIP(); err == nil {
-		log.Printf("Start server at http://%s", net.JoinHostPort(ipAddr.String(), strconv.Itoa(port)))
-	}
-	err := http.ListenAndServe(fmt.Sprintf(":%d", port), nil)
-	return err
-}
-
-func updateTest(w http.ResponseWriter, r *http.Request) {
-	c, err := upgrader.Upgrade(w, r, nil)
-	if err != nil {
-		log.Print("upgrade:", err)
-		return
-	}
-	defer c.Close()
-	ctx, cancel := context.WithCancel(context.Background())
-	defer cancel()
-	for {
-		mt, message, err := c.ReadMessage()
-		if err != nil {
-			log.Println("read:", err)
-			break
-		}
-		// log.Printf("recv: %s", message)
-		links, options, err := parseMessage(message)
-		if err != nil {
-			msg := `{"info": "error", "reason": "invalidsub"}`
-			c.WriteMessage(mt, []byte(msg))
-			continue
-		}
-		if options.Unique {
-			uniqueLinks := []string{}
-			uniqueMap := map[string]struct{}{}
-			for _, link := range links {
-				cfg, err := config.Link2Config(link)
-				if err != nil {
-					continue
-				}
-				key := fmt.Sprintf("%s%d%s%s%s", cfg.Server, cfg.Port, cfg.Password, cfg.Protocol, cfg.SNI)
-				if _, ok := uniqueMap[key]; !ok {
-					uniqueLinks = append(uniqueLinks, link)
-					uniqueMap[key] = struct{}{}
-				}
-			}
-			links = uniqueLinks
-		}
-		p := ProfileTest{
-			Writer:      c,
-			MessageType: mt,
-			Links:       links,
-			Options:     options,
-		}
-		go p.testAll(ctx)
-		// err = c.WriteMessage(mt, getMsgByte(0, "gotspeed"))
-		// if err != nil {
-		// 	log.Println("write:", err)
-		// 	break
-		// }
-	}
-}
 
 func readConfig(configPath string) (*ProfileTestOptions, error) {
 	data, err := os.ReadFile(configPath)
@@ -199,7 +130,6 @@ type TestResult struct {
 	// SortMethod   string       `json:"sortMethod"`
 	Nodes render.Nodes `json:"nodes"`
 }
-
 
 func isPrivateIP(ip net.IP) bool {
 	var privateIPBlocks []*net.IPNet
