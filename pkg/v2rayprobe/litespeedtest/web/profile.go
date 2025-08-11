@@ -625,10 +625,12 @@ func (p *ProfileTest) testAllBatch(ctx context.Context, workerPoolSize int) (ren
 	}
 	nodes.Sort(p.Options.SortMethod)
 	nodes.ChangeRemarks(remarkPrefix)
-	if p.Options.OutputMode == JSON_OUTPUT {
-		p.saveJSON(nodes, traffic, duration, successCount, linksCount)
-	} else if p.Options.OutputMode == TEXT_OUTPUT {
-		p.saveText(nodes)
+	if len(nodes) >= MinCountToWrite {
+		if p.Options.OutputMode == JSON_OUTPUT {
+			p.saveJSON(nodes, traffic, duration, successCount, linksCount)
+		} else if p.Options.OutputMode == TEXT_OUTPUT {
+			p.saveText(nodes)
+		}
 	}
 	return nodes, nil
 }
