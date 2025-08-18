@@ -1,13 +1,1 @@
-ss://Y2hhY2hhMjAtaWV0Zi1wb2x5MTMwNTo0YTJyZml4b3BoZGpmZmE4S1ZBNEFh@45.87.175.164:8080#%f0%9f%87%b3%f0%9f%87%b1%20NL%206
-ss://Y2hhY2hhMjAtaWV0Zi1wb2x5MTMwNToxUld3WGh3ZkFCNWdBRW96VTRHMlBn@beesyar.org:8080#%f0%9f%87%b3%f0%9f%87%b1%20NL%203
-ss://Y2hhY2hhMjAtaWV0Zi1wb2x5MTMwNTpjdklJODVUclc2bjBPR3lmcEhWUzF1@ltnl13.saint.ydns.eu:8080#%f0%9f%87%b3%f0%9f%87%b1%20NL%202
-ss://Y2hhY2hhMjAtaWV0Zi1wb2x5MTMwNTpEcFViUWwxdm1uTUh1S3J1M0lGcFpY@94.159.96.245:11902#%f0%9f%87%a9%f0%9f%87%aa%20DE%201
-trojan://2ee85121-31de-4581-a492-eb00f606e392@192.3.107.252:443?security=tls&sni=rc8.freeguard.org&path=%2f#%f0%9f%87%ba%f0%9f%87%b8%20US%2014
-ss://Y2hhY2hhMjAtaWV0Zi1wb2x5MTMwNTo5QXRIZUxPZFhrMEJGMnhCejlndDg1@78.129.140.11:443#%f0%9f%87%ac%f0%9f%87%a7%20GB%202
-trojan://LG7HKcZFIJ@sws.ftpcomand.com:110?security=tls&sni=sws.ftpcomand.com&type=tcp&headerType=none&path=%2f#%f0%9f%87%a8%f0%9f%87%ad%20CH%201
-ss://YWVzLTI1Ni1jZmI6ZjhmN2FDemNQS2JzRjhwMw==@192.121.87.89:989#%f0%9f%87%b2%f0%9f%87%a9%20MD%201
-vmess://eyJ2IjpudWxsLCJwcyI6IvCfh63wn4ewIEhLIDEiLCJhZGQiOiJjMmIwNGU2OC1zdmE3NDAtc3Z4Y2twLTFzd3J5LmhrLnA1cHYuY29tIiwicG9ydCI6ODAsImlkIjoiOGE1ZDU4YTAtYzUwZS0xMWVmLWE0NmUtZjIzYzkxM2M4ZDJiIiwiYWlkIjoiMiIsInNjeSI6bnVsbCwibmV0Ijoid3MiLCJ0eXBlIjpudWxsLCJob3N0IjoiYzJiMDRlNjgtc3ZhNzQwLXN2eGNrcC0xc3dyeS5oay5wNXB2LmNvbSIsImFscG4iOm51bGwsInBhdGgiOiIvIiwidGxzIjoiIiwic25pIjpudWxsLCJmcCI6bnVsbH0=
 ss://YWVzLTI1Ni1jZmI6WG44aktkbURNMDBJZU8lIyQjZkpBTXRzRUFFVU9wSC9ZV1l0WXFERm5UMFNW@103.186.155.133:38388#%f0%9f%87%bb%f0%9f%87%b3%20VN%201
-ss://Y2hhY2hhMjAtaWV0Zi1wb2x5MTMwNTpjdklJODVUclc2bjBPR3lmcEhWUzF1@45.87.175.154:8080#%f0%9f%87%b3%f0%9f%87%b1%20NL%201
-trojan://LG7HKcZFIJ@sws.ftpcomand.com:110?security=tls&sni=sws.ftpcomand.com&path=%2f#%f0%9f%87%a8%f0%9f%87%ad%20CH%202
-ss://Y2hhY2hhMjAtaWV0Zi1wb2x5MTMwNToxUld3WGh3ZkFCNWdBRW96VTRHMlBn@ltnl14.saint.ydns.eu:8080#%f0%9f%87%b3%f0%9f%87%b1%20NL%205
